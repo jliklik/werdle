@@ -10,6 +10,7 @@ defmodule WerdleWeb.WordLive.Index do
     socket =
       socket
       |> assign(:cell_backgrounds, %{})
+      |> assign(:keyboard_backgrounds, %{})
       |> assign(:changeset, nil)
 
     {:ok, socket}

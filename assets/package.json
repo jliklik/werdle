@@ -1,0 +1,49 @@
+{
+  "devDependencies": {
+    "daisy": "^0.2.0",
+    "daisyui": "^4.12.10"
+  },
+  "name": "assets",
+  "version": "1.0.0",
+  "main": "tailwind.config.js",
+  "dependencies": {
+    "amqp": "^0.2.7",
+    "async": "^0.1.22",
+    "beanpoll": "^0.2.19",
+    "cashew": "^0.0.5",
+    "colors": "^0.5.1",
+    "comerr": "^0.0.9",
+    "crema": "^0.1.5",
+    "disposable": "^0.0.5",
+    "dolce": "^0.0.14",
+    "dref": "^0.0.6",
+    "eyes": "^0.1.8",
+    "lodash": "^4.17.21",
+    "loggly": "^0.3.11",
+    "mesh-winston": "^0.0.1",
+    "node-fs": "^0.1.7",
+    "outcome": "^0.0.18",
+    "pkginfo": "^0.2.3",
+    "plugin": "^0.1.0",
+    "request": "^2.9.203",
+    "sift": "^17.1.3",
+    "sprintf": "^0.1.5",
+    "stack-trace": "^0.0.10",
+    "strscanner": "^0.0.8",
+    "structr": "^0.1.3",
+    "timespan": "^2.3.0",
+    "tq": "^0.0.1",
+    "type-component": "^0.0.1",
+    "underscore": "^1.2.2",
+    "vine": "^0.0.14",
+    "winston": "^0.5.11",
+    "yaconfig": "^0.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
