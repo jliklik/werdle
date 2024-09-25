@@ -17,7 +17,7 @@ defmodule WerdleWeb.Router do
   scope "/", WerdleWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", WordLive.Index, :index
   end
 
   # Other scopes may use custom stacks.
