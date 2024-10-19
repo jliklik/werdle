@@ -19,6 +19,7 @@ defmodule WerdleWeb.GameBoard.GridComponent do
   def render(assigns) do
     ~H"""
       <div id={@id}
+           phx-hook="ShakeRowAnimation"
            phx-target={@myself}
            class="grid grid-cols-1 self-start mt-5 mb-5 gap-y-1">
         <div class="grid grid-cols-1 col-span-1 gap-1.5">

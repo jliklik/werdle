@@ -21,11 +21,18 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import ShakeRowAnimation from './hooks/shake_row_animation'
+import ValidationMessageHandler from "./hooks/validation_message_hander"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+const Hooks = {
+  ShakeRowAnimation: ShakeRowAnimation,
+  ValidationMessageHandler: ValidationMessageHandler
+}
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
-  params: {_csrf_token: csrfToken}
+  params: {_csrf_token: csrfToken},
+  hooks: Hooks
 })
 
 // Show progress bar on live navigation and form submits
