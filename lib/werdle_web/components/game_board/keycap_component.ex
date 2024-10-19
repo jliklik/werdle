@@ -36,7 +36,7 @@ defmodule WerdleWeb.GameBoard.KeycapComponent do
   end
   def render(assigns) do
     ~H"""
-    <kbd id={@id} class="kbd kbd-md sm:kbd-lg bg-gray-500 text-slate-200 cursor-default font-bold font-sans border-transparent rounded-md py-2 sm:py-3 px-0 w-2 sm:px-1">
+    <kbd id={@id} phx-click="letter" phx-value-key={@keycap_value} class="kbd kbd-md sm:kbd-lg bg-gray-500 text-slate-200 cursor-default font-bold font-sans border-transparent rounded-md py-2 sm:py-3 px-0 w-2 sm:px-1">
       <%= String.upcase(@keycap_value) %>
     </kbd>
     """

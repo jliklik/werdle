@@ -13,8 +13,24 @@ defmodule WerdleWeb.WordLive.Index do
       |> assign(:cell_backgrounds, %{})
       |> assign(:keyboard_backgrounds, %{})
       |> assign(:changeset, Game.change_guesses())
+      |> assign(:current_guess, 0)
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("letter", %{"key" => key}, socket) do
+    changeset = socket.assigns.changeset
+    guess_row = socket.assigns.current_guess
+
+    IO.inspect(changeset, limit: :infinity)
+
+    if Game.five_character_guess?(changeset, guess_row) do
+      {:noreply, socket}
+    else
+      socket = assign(socket, :changeset, Game.update_guesses(changeset, key, guess_row))
+      {:noreply, socket}
+    end
   end
 
 end
