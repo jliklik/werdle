@@ -6,7 +6,19 @@ defmodule Werdle.WordBank do
   import Ecto.Query, warn: false
   alias Werdle.Repo
 
-  alias Werdle.WordBank.Word
+  alias Werdle.WordBank.{Word, Solve}
+
+  def random_solve do
+    query =
+      from solve in Solve, order_by: fragment("RANDOM()"), limit: 1
+    Repo.one(query)
+  end
+
+  def word_exists?(name) do
+    query =
+      from word in Word, where: word.name == ^name
+    Repo.exists?(query)
+  end
 
   @doc """
   Returns the list of words.
@@ -101,8 +113,6 @@ defmodule Werdle.WordBank do
   def change_word(%Word{} = word, attrs \\ %{}) do
     Word.changeset(word, attrs)
   end
-
-  alias Werdle.WordBank.Solve
 
   @doc """
   Returns the list of solves.

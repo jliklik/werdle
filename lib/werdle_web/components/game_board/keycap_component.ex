@@ -29,7 +29,7 @@ defmodule WerdleWeb.GameBoard.KeycapComponent do
   end
   def render(%{keycap_value: "enter"} = assigns) do
     ~H"""
-    <kbd id={@id} class="kbd kbd-lg bg-gray-500 text-slate-200 cursor-default font-bold border-transparent rounded-md py-3 text-xs">
+    <kbd id={@id} phx-click="enter" class="kbd kbd-lg bg-gray-500 text-slate-200 cursor-default font-bold border-transparent rounded-md py-3 text-xs">
       <%= String.upcase(@keycap_value) %>
     </kbd>
     """
