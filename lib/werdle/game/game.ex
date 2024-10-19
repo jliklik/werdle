@@ -7,7 +7,16 @@ defmodule Werdle.Game do
     Guesses.changeset(attrs)
   end
 
-  def five_character_guess?(changeset, guess_row) do
+  def remove_last_char(changeset, guess_row) do
+    guess_field = guess_field(guess_row)
+    current_guess = Changeset.get_change(changeset, guess_field, [])
+    updated_guess = List.delete_at(current_guess, -1)
+    changeset.changes
+    |> Map.merge(%{guess_field => updated_guess})
+    |> change_guesses()
+  end
+
+  def five_char_guess?(changeset, guess_row) do
     guess_field = guess_field(guess_row)
     char_count =
       changeset

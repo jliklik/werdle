@@ -25,12 +25,23 @@ defmodule WerdleWeb.WordLive.Index do
 
     IO.inspect(changeset, limit: :infinity)
 
-    if Game.five_character_guess?(changeset, guess_row) do
+    if Game.five_char_guess?(changeset, guess_row) do
       {:noreply, socket}
     else
       socket = assign(socket, :changeset, Game.update_guesses(changeset, key, guess_row))
       {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event("backspace", _params, socket) do
+    changeset = socket.assigns.changeset
+    guess_row = socket.assigns.current_guess
+    socket =
+      socket
+      |> assign(:changeset, Game.remove_last_char(changeset, guess_row))
+
+    {:noreply, socket}
   end
 
 end
