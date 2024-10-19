@@ -52,25 +52,37 @@ defmodule WerdleWeb.WordLive.Index do
     with {:ok, _changeset} <- Game.validate_guess(changeset, guess_row),
          {:correct, _changeset}<- Game.check_guess_correctness(changeset, guess_row, solve)
     do
-      IO.puts("RESULT: You won")
-      {:noreply, socket}
+      {:noreply, handle_correct_guess(socket, solve)}
     else
       {:error, error_message} ->
-        IO.puts("RESULT: #{error_message}")
-        {:noreply, socket}
+        {:noreply, handle_invalid_guess(socket, error_message)}
       {:incorrect, _changeset} when guess_row == 5 ->
-        IO.puts("RESULT: You lost")
-        {:noreply, socket}
+        {:noreply, handle_game_over(socket, solve)}
       {:incorrect, _changeset} ->
-        IO.puts("RESULT: Try again")
-        socket = assign(socket, :current_guess, guess_row + 1)
-        {:noreply, socket}
+        {:noreply, handle_incorrect_guess(socket, guess_row)}
     end
-    # validate that it is a valid guess
 
+  end
 
-    # check that it is a correct guess
+  defp handle_correct_guess(socket, solve) do
+    socket
+    |> put_flash(:correct, "#{String.upcase(solve.name)} was the correct word")
+  end
 
+  defp handle_invalid_guess(socket, error_message) do
+    socket
+    |> put_flash(:error, error_message)
+  end
+
+  defp handle_game_over(socket, solve) do
+    socket
+    |> put_flash(:game_over, "The solve was #{String.upcase(solve.name)}")
+  end
+
+  defp handle_incorrect_guess(socket, guess_row) do
+    socket
+    |> assign(:current_guess, guess_row + 1)
+    |> put_flash(:incorrect, "Try another word")
   end
 
 end
