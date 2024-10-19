@@ -3,6 +3,7 @@ defmodule WerdleWeb.WordLive.Index do
 
   alias Werdle.WordBank
   alias Werdle.WordBank.Word
+  alias Werdle.Game
 
   @impl true
   def mount(_params, _session, socket) do
@@ -11,7 +12,7 @@ defmodule WerdleWeb.WordLive.Index do
       socket
       |> assign(:cell_backgrounds, %{})
       |> assign(:keyboard_backgrounds, %{})
-      |> assign(:changeset, nil)
+      |> assign(:changeset, Game.change_guesses())
 
     {:ok, socket}
   end
