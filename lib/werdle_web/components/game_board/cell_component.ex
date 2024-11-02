@@ -4,21 +4,27 @@ defmodule WerdleWeb.GameBoard.CellComponent do
 
   @impl true
   def update(
-    %{id: id, cell_backgrounds: cell_backgrounds, changeset: changeset},
+    %{id: id, changeset: changeset},
     socket
   ) do
     socket =
       socket
       |> assign(:id, id)
-      |> assign(:cell_backgrounds, cell_backgrounds)
       |> assign(:changeset, changeset)
-      |> assign(:background, "bg-transparent")
+      |> assign(:background, socket.assigns[:background] || "bg-transparent")
 
     {:ok, socket}
   end
 
   @impl true
-  def render(%{id: id, changeset: changeset, background: background} = assigns) do
+  def handle_event("cell_background_update", %{"background" => background}, socket) do
+    # IO.inspect("handling event: #{inspect([background: background])}")
+    socket = assign(socket, :background, "#{background} flip-cell")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def render(%{id: id, changeset: changeset} = assigns) do
     [row, column] = get_row_and_column(id)
     input_value = Game.get_char_from_grid(changeset, row, column)
     assigns = assign(assigns, :input_value, input_value) # interesting, use assigns to feed in elixir variables

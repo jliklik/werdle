@@ -3,13 +3,12 @@ defmodule WerdleWeb.GameBoard.RowComponent do
 
   @impl true
   def update(
-    %{id: id, cell_backgrounds: cell_backgrounds, row_index: row_index, changeset: changeset},
+    %{id: id, row_index: row_index, changeset: changeset},
     socket
   ) do
     socket =
       socket
       |> assign(:id, id)
-      |> assign(:cell_backgrounds, cell_backgrounds)
       |> assign(:row_index, row_index)
       |> assign(:changeset, changeset)
 
@@ -24,7 +23,6 @@ defmodule WerdleWeb.GameBoard.RowComponent do
         <.live_component
           module={WerdleWeb.GameBoard.CellComponent}
           id={"input-cell-#{@row_index}-#{column_index}"}
-          cell_backgrounds={@cell_backgrounds}
           changeset={@changeset} />
       <% end %>
     </div>

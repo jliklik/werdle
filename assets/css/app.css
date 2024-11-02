@@ -4,6 +4,16 @@
 
 /* This file is for your main application CSS */
 
+.flip-cell {
+  animation: shrink-vertical 0.5s 1; /* complete in half a sec, run once */
+}
+
+@keyframes shrink-vertical {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
+}
+
 .shake-element {
   animation: shake 0.4s 1;
 }

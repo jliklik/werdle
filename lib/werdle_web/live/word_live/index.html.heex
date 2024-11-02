@@ -1,9 +1,10 @@
 <div phx-hook="ValidationMessageHandler" id="game-container" class="flex flex-wrap items-top justify-center w-screen">
-  <.live_component
-    module={WerdleWeb.GameBoard.GridComponent}
-    id="input-grid"
-    cell_backgrounds={@cell_backgrounds}
-    changeset={@changeset} />
+  <div id="guess-reveal", phx-hook="GuessRevealAnimation">
+    <.live_component
+      module={WerdleWeb.GameBoard.GridComponent}
+      id="input-grid"
+      changeset={@changeset} />
+  </div>
 
   <.live_component
     module={WerdleWeb.GameBoard.KeyboardComponent}

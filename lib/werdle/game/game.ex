@@ -4,6 +4,32 @@ defmodule Werdle.Game do
   alias Werdle.Game.Guesses
   alias Ecto.Changeset
 
+  def compare_guess(changeset, guess_row, solve) do
+    solve_list = String.codepoints(solve)
+    guess_field = guess_field(guess_row)
+    guess_list = Changeset.get_field(changeset, guess_field)
+
+    guess_status_list =
+      guess_list
+      |> Enum.with_index()
+      |> Enum.map(fn {guess_char, index} ->
+        if guess_char == Enum.at(solve_list, index) do
+          :correct
+        else
+          check_partial_match(guess_char, solve_list)
+        end
+      end)
+
+    Enum.zip(guess_list, guess_status_list)
+  end
+  def check_partial_match(guess_char, solve_list) do
+    if Enum.any?(solve_list, fn char -> char == guess_char end) do
+      :partial
+    else
+      :incorrect
+    end
+  end
+
   def change_guesses(attrs \\ %{}) do
     Guesses.changeset(attrs)
   end

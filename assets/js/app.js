@@ -22,11 +22,13 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import ShakeRowAnimation from './hooks/shake_row_animation'
+import GuessRevealAnimation from './hooks/guess_reveal_animation'
 import ValidationMessageHandler from "./hooks/validation_message_hander"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const Hooks = {
   ShakeRowAnimation: ShakeRowAnimation,
+  GuessRevealAnimation: GuessRevealAnimation,
   ValidationMessageHandler: ValidationMessageHandler
 }
 let liveSocket = new LiveSocket("/live", Socket, {

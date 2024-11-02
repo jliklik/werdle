@@ -9,7 +9,6 @@ defmodule WerdleWeb.WordLive.Index do
     socket =
       socket
       |> assign(:solve, WordBank.random_solve()) # assign answer to the game
-      |> assign(:cell_backgrounds, %{})
       |> assign(:keyboard_backgrounds, %{})
       |> assign(:changeset, Game.change_guesses())
       |> assign(:current_guess, 0)
@@ -52,41 +51,66 @@ defmodule WerdleWeb.WordLive.Index do
     with {:ok, _changeset} <- Game.validate_guess(changeset, guess_row),
          {:correct, _changeset}<- Game.check_guess_correctness(changeset, guess_row, solve)
     do
-      {:noreply, handle_correct_guess(socket, solve)}
+      {:noreply, handle_correct_guess(socket)}
     else
       {:error, error_message} ->
         {:noreply, handle_invalid_guess(socket, error_message)}
       {:incorrect, _changeset} when guess_row == 5 ->
-        {:noreply, handle_game_over(socket, solve)}
+        {:noreply, handle_game_over(socket)}
       {:incorrect, _changeset} ->
-        {:noreply, handle_incorrect_guess(socket, guess_row)}
+        {:noreply, handle_incorrect_guess(socket)}
     end
 
   end
 
-  defp handle_correct_guess(socket, solve) do
-    message = "#{String.upcase(solve.name)} was the correct word"
-    socket
-    |> push_event("guess-validation-text", %{message: message})
+  defp handle_correct_guess(socket) do
+    message = "You won! #{String.upcase(socket.assigns.solve.name)} was the correct word"
+    create_guess_response(socket, message)
   end
 
   defp handle_invalid_guess(socket, error_message) do
     socket
-    |> push_event("shake-row", %{row: socket.assigns.current_guess}) # payload is the row
     |> push_event("guess-validation-text", %{message: error_message})
+    |> push_event("shake-row", %{row: socket.assigns.current_guess}) # payload is the row
   end
 
-  defp handle_game_over(socket, solve) do
+  defp handle_game_over(socket) do
+    message = "The solve was #{String.upcase(socket.assigns.solve.name)}"
+
     socket
-    |> push_event("shake-row", %{row: socket.assigns.current_guess}) # payload is the row
-    |> push_event("guess-validation-text", %{message: "The solve was #{String.upcase(solve.name)}"})
+    |> create_guess_response(message)
+    |> push_event("guess-validation-text", %{message: message})
   end
 
-  defp handle_incorrect_guess(socket, guess_row) do
+  defp handle_incorrect_guess(socket) do
     socket
-    |> assign(:current_guess, guess_row + 1)
+    |> create_guess_response(nil)
     |> push_event("shake-row", %{row: socket.assigns.current_guess}) # payload is the row
-    |> push_event("guess-validation-text", %{message: "Try another word"})
+    |> assign(:current_guess, socket.assigns.current_guess + 1)
+  end
+
+  defp create_guess_response(socket, message) do
+    guess_row = socket.assigns.current_guess
+    comparison_results =
+      Game.compare_guess(socket.assigns.changeset, guess_row, socket.assigns.solve.name)
+
+    IO.inspect(comparison_results, label: "comparison_results")
+
+    letter_statuses =
+      Enum.map(comparison_results, fn {_letter, letter_status} -> letter_status end)
+
+    socket
+    |> maybe_push_event("guess-validation-text", message)
+    |> push_event("guess-reveal-animation", %{
+      guess_row: guess_row,
+      letter_statuses: letter_statuses
+    })
+  end
+
+  defp maybe_push_event(socket, nil, _), do: socket
+  defp maybe_push_event(socket, event, message) do
+    IO.inspect("pushing event: #{inspect([event: event, message: message])}")
+    push_event(socket, event, %{message: message})
   end
 
 end
