@@ -50,7 +50,8 @@ defmodule Werdle.Game do
   def check_guess_correctness(changeset, guess_row, solve) do
     guess_field = guess_field(guess_row)
     guess = Changeset.get_field(changeset, guess_field) |> Enum.join()
-    if guess == solve, do: {:correct, changeset}, else: {:incorrect, changeset}
+    IO.inspect([guess: guess, solve: solve])
+    if guess == solve.name, do: {:correct, changeset}, else: {:incorrect, changeset}
   end
 
   def remove_last_char(changeset, guess_row) do
