@@ -9,6 +9,7 @@ export default {
     this.handleEvent('guess-reveal-animation', data => {
       const currentRow = document.getElementById(`input-row-${data.guess_row}`);
       const inputCells = Array.from(currentRow.children);
+      const totalDelay = inputCells.length * 500;
 
       inputCells.forEach((inputCell, index) => {
         setTimeout(() => { // staggers color reveal
@@ -20,6 +21,13 @@ export default {
         }, index * 500);
       });
 
+      setTimeout(() => {
+        Object.entries(data.comparison_results).forEach(([letter, guessResult]) => {
+          let keycapComponentID = `#keycap-${letter}`;
+          let backgroundColor = classMappings[guessResult];
+          this.pushEventTo(keycapComponentID, "keycap_background", {background: backgroundColor});
+        })
+      }, totalDelay);
     });
 
   }

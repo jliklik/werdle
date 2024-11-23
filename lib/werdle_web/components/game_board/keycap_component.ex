@@ -1,9 +1,16 @@
 defmodule WerdleWeb.GameBoard.KeycapComponent do
   use WerdleWeb, :live_component
 
+  @background_hierarchy %{
+    "bg-green-600" => 4,
+    "bg-yellow-600" => 3,
+    "bg-red-600" => 2,
+    "bg-gray-500" => 1
+  }
+
   @impl true
   def update(
-    %{id: id, keycap_value: keycap_value, keyboard_backgrounds: keyboard_backgrounds},
+    %{id: id, keycap_value: keycap_value},
     socket
     ) do
 
@@ -11,9 +18,19 @@ defmodule WerdleWeb.GameBoard.KeycapComponent do
       socket
       |> assign(:id, id)
       |> assign(:keycap_value, keycap_value)
-      |> assign(:keyboard_backgrounds, keyboard_backgrounds)
+      |> assign(:background, socket.assigns[:background] || "bg-gray-500")
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_event("keycap_background", %{"background" => background}, socket) do
+    current_priority = Map.get(@background_hierarchy, socket.assigns.background, 0)
+    new_priority = Map.get(@background_hierarchy, background, 0)
+    new_background =
+      if new_priority > current_priority, do: background, else: socket.assigns.background
+    socket = assign(socket, :background, new_background)
+    {:noreply, socket}
   end
 
   @impl true
@@ -39,7 +56,10 @@ defmodule WerdleWeb.GameBoard.KeycapComponent do
   # bind to this event in index.ex
   def render(assigns) do
     ~H"""
-    <kbd id={@id} phx-click="letter" phx-value-key={@keycap_value} class="kbd kbd-md sm:kbd-lg bg-gray-500 text-slate-200 cursor-default font-bold font-sans border-transparent rounded-md py-2 sm:py-3 px-0 w-2 sm:px-1">
+    <kbd id={@id}
+        phx-click="letter"
+        phx-value-key={@keycap_value}
+        class={"kbd kbd-md sm:kbd-lg #{@background} text-slate-200 cursor-default font-bold font-sans border-transparent rounded-md py-2 sm:py-3 px-0 w-2 sm:px-1"}>
       <%= String.upcase(@keycap_value) %>
     </kbd>
     """

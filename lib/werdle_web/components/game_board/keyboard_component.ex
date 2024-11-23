@@ -8,12 +8,11 @@ defmodule WerdleWeb.GameBoard.KeyboardComponent do
   ]
 
   @impl true
-  def update(%{id: id, keyboard_backgrounds: keyboard_backgrounds}, socket) do
+  def update(%{id: id}, socket) do
     socket =
       socket
       |> assign(:id, id)
       |> assign(:keyboard_rows, @keyboard_rows)
-      |> assign(:keyboard_backgrounds, keyboard_backgrounds)
 
     {:ok, socket}
   end
@@ -29,7 +28,6 @@ defmodule WerdleWeb.GameBoard.KeyboardComponent do
             module={WerdleWeb.GameBoard.KeycapComponent}
             id={"keycap-#{keycap_value}"}
             keycap_value={keycap_value}
-            keyboard_backgrounds={@keyboard_backgrounds}
           />
         <% end %>
         </div>

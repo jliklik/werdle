@@ -9,7 +9,6 @@ defmodule WerdleWeb.WordLive.Index do
     socket =
       socket
       |> assign(:solve, WordBank.random_solve()) # assign answer to the game
-      |> assign(:keyboard_backgrounds, %{})
       |> assign(:changeset, Game.change_guesses())
       |> assign(:current_guess, 0)
 
@@ -17,6 +16,7 @@ defmodule WerdleWeb.WordLive.Index do
   end
 
   @impl true
+  @spec handle_event(<<_::40, _::_*8>>, any(), any()) :: {:noreply, any()}
   def handle_event("letter", %{"key" => key}, socket) do
     changeset = socket.assigns.changeset
     guess_row = socket.assigns.current_guess
@@ -103,7 +103,8 @@ defmodule WerdleWeb.WordLive.Index do
     |> maybe_push_event("guess-validation-text", message)
     |> push_event("guess-reveal-animation", %{
       guess_row: guess_row,
-      letter_statuses: letter_statuses
+      letter_statuses: letter_statuses,
+      comparison_results: Map.new(comparison_results)
     })
   end
 
